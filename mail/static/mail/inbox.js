@@ -1,7 +1,5 @@
 document.addEventListener('DOMContentLoaded', function() {
-
-
-
+  
   // send email
 
   document.querySelector('#compose-form').onsubmit = send_email;
@@ -16,6 +14,15 @@ document.addEventListener('DOMContentLoaded', function() {
   // By default, load the inbox
   load_mailbox('inbox');
 });
+
+// window.onscroll = () => {
+//   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) {
+//     document.querySelector('body').style.background = 'grey'; 
+//   }
+//   else {
+//     document.querySelector('body').style.background = 'white'; 
+//   }
+// }
 
 function compose_email() {
 
@@ -33,7 +40,11 @@ function compose_email() {
 }
 
 function load_mailbox(mailbox) {
-  
+  window.onpopstate = function(event) {
+    console.log(event.state.mailbox);
+    load_mailbox(event.state.mailbox);
+  }
+  history.pushState({mailbox: mailbox}, "", `${mailbox}`);
   // Show the mailbox and hide other views
   document.querySelector('#emails-view').style.display = 'block';
   document.querySelector('#compose-view').style.display = 'none';
@@ -69,6 +80,7 @@ function load_mailbox(mailbox) {
                   read: true
               })
             })
+            
           }
           
           console.log('This email has been clicked!');
